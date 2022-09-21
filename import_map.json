@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "cheerio": "https://deno.land/x/denocheerio@1.0.0/mod.ts"
+  }
+}

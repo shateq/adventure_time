@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "strict": true
+    },
+    "importMap": "./import_map.json",
+    "fmt": {
+        "options": {
+            "useTabs": false,
+            "lineWidth": 120,
+            "indentWidth": 4,
+            "singleQuote": true,
+            "proseWrap": "preserve"
+        }
+    },
+    "tasks": {
+        "dev": "deno run --allow-net --allow-write main.ts"
+    }
+}
