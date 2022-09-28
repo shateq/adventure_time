@@ -1,54 +1,83 @@
-// Some text
 import { cheerio } from 'cheerio';
-// const content = 'main.page__main>div#content';
+import { Episode, ListedEpisode } from './search.ts';
 
-export const FANDOM = 'https://adventuretime.fandom.com';
+const FANDOM = 'https://adventuretime.fandom.com';
+const LIST = `${FANDOM}/wiki/Category:Transcripts`;
+const TALK = `${FANDOM}/wiki/Category_talk:Transcripts`;
 
-const _named = (name: string) => `${FANDOM}/wiki/${name}/Transcript`;
-const _href = (href: string | undefined) => `${FANDOM}${href}`;
+export const href = (href: string) => `${FANDOM}${href}`;
 
-export const LIST = `${FANDOM}/wiki/Category:Transcripts`;
+/**
+ * @param episode The URL pointing to the episode transcript page
+ * @returns Episode object
+ */
+export async function transcribeEpisode<T extends string | URL>(episode: T): Promise<Episode> {
+    let data: Episode;
 
-export async function episodeList(): Promise<string | void> {
+    return await fetch(episode).then((res) => res.text()).then((text) => cheerio.load(text))
+        .then(($) => {
+            let transcript = '';
+
+            $('dl').each((_, e) => {
+                transcript += $(e).text().trim().concat(' \n');
+            });
+
+            data = new Episode(
+                $('h1#firstHeading').text().replace('/(\/Transcript)/i', '').trim(),
+                $('aside.portable-infobox>nav').text().trim(),
+                transcript,
+            );
+
+            return (data);
+        });
+}
+/**
+ * Lists episodes
+ * @returns List of Episodes
+ */
+export async function episodeList(): Promise<Array<ListedEpisode>> {
     const content = 'div#mw-content-text>.category-page__members';
+    const list: Array<ListedEpisode> = [];
 
-    return await fetch(LIST).then((res) => res.text())
-        .then((text) => {
-            const $ = cheerio.load(text);
-
+    return await fetch(LIST).then((res) => res.text()).then((text) => cheerio.load(text))
+        .then(($) => {
             $(content).children('div').children('ul')
-                .each((i, e) => {
+                .each((_, e) => {
                     // Every item of every list
                     $(e).children('li')
                         .each((_, el) => {
-                            const a = $(el).children('a').attr('href');
-                            console.log(`%s - %s`, $(el).text().trim(), _href(a));
+                            const ref = href($(el).children('a').attr('href'));
+
+                            list.push(new ListedEpisode($(el).text().trim(), ref));
                         });
                 });
 
-            //return 'somedataformat'; // TODO: think of data format
-        }).catch((error) => console.error(error));
+            return list;
+        });
 }
 
-export const TALK = `${FANDOM}/wiki/Category_talk:Transcripts`;
+export async function seasonTable(int: number /*Season ${int}*/): Promise<Array<ListedEpisode>> {
+    const list: Array<ListedEpisode> = [];
 
-export async function seasonTable(int: number /* Season ${int} */): Promise<string | void> {
-    return await fetch(TALK).then((res) => res.text())
-        .then((text) => {
-            const $ = cheerio.load(text);
-            let table = `Season ${int}`;
+    return await fetch(TALK).then((res) => res.text()).then((text) => cheerio.load(text))
+        .then(($) => {
+            $('h2').each((_, e) => {
+                if ($(e).text().trim().includes(`Season ${int}`)) {
+                    $(e).next('table')
+                        .children('tbody').children('tr')
+                        .each((_, el) => {
+                            const name = $(el).children('td').first().text();
+                            const ref = href($(el).children('td').children('a').attr('href'));
 
-            $('h2')
-                .each((_, e) => {
-                    if ($(e).text() /* Header title */.includes(`Season ${int}`)) {
-                        const html = $(e).next('table').html();
-                        if (html != null) {
-                            table = html;
-                        }
-                        return (false);
-                    }
-                });
+                            if (name != '') {
+                                list.push(new ListedEpisode(name, ref));
+                            }
+                        });
 
-            return (table);
-        }).catch((error) => console.error(error));
+                    return (false);
+                }
+            });
+
+            return list;
+        });
 }
