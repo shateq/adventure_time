@@ -1,5 +1,7 @@
 {
   "imports": {
-    "cheerio": "https://deno.land/x/denocheerio@1.0.0/mod.ts"
+    "cheerio": "https://deno.land/x/denocheerio@1.0.0/mod.ts",
+    "$test/": "https://deno.land/std@0.157.0/testing/",
+    "$test": "https://deno.land/std@0.157.0/testing"
   }
 }

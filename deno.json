@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
         "allowJs": true,
-        "strict": true
+        "strict": true,
+        "strictNullChecks": false
     },
-    "importMap": "./import_map.json",
     "fmt": {
         "options": {
             "useTabs": false,
@@ -13,7 +13,9 @@
             "proseWrap": "preserve"
         }
     },
+    "importMap": "./import_map.json",
     "tasks": {
-        "dev": "deno run --allow-net --allow-write main.ts"
+        "dev": "deno run --allow-net --allow-write main.ts",
+        "test": "deno test --parallel"
     }
 }
