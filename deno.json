@@ -15,7 +15,7 @@
     },
     "importMap": "./import_map.json",
     "tasks": {
-        "dev": "deno run --allow-net --allow-write main.ts",
-        "test": "deno test --parallel"
+        "dev": "deno run --allow-net --unstable ./test.ts",
+        "test": "deno test --parallel --allow-net"
     }
 }
