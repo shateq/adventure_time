@@ -28,15 +28,11 @@ jobs:
         with:
           deno-version: v1.x
 
-        - name: Cache dependencies 
-          uses: actions/cache@v2
-          with:
-            path: ${{ env.DENO_DIR }}
-            key: ${{ secrets.CACHE_KEY }}
+      - name: Cache dependencies 
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.DENO_DIR }}
+          key: ${{ secrets.CACHE_KEY }}
 
       - run: deno lint
-
       - run: deno task test
-      
-
-
