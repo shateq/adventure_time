@@ -5,17 +5,22 @@ Fetches pages from _AT_ fandom website and parses it to be accessible from libra
 
 > ⚠️ Alpha stage! TODO is to document the project!
 
-## Use (ci)
+
+## Use [![Test](https://github.com/shateq/adventure_time/actions/workflows/test.yml/badge.svg)](https://github.com/shateq/adventure_time/actions/workflows/test.yml)
 [deno.land/x](https://deno.land/x/adventure_time)
 
 ```js
-    import { seasonTable } from 'deno.land/x/adventure_time/mod.ts';
+import { seasonTable, episodeList } from 'deno.land/x/adventure_time/mod.ts';
 
-    seasonTable(4)
-    .then(list => {
-        list[0].transcribeListed();
-    })
+seasonTable(4).then(list => {
+    const episode = list[0].transcribeListed();
+    console.log(episode.name);
+})
+
+episodeList().then(list => {
+    console.table(list);
+})
 ```
 ---
 ### License
-Project code is available under GPU GPL 3.0 license, check `LICENSE` file for details.
+Project code is available under GNU GPL 3.0 license, check `LICENSE` file for details.
