@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - '**.json'
+
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**.json'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    env:
+      DENO_DIR: cache_dir
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1.1.0
+        with:
+          deno-version: v1.x
+
+        - name: Cache dependencies 
+          uses: actions/cache@v2
+          with:
+            path: ${{ env.DENO_DIR }}
+            key: ${{ secrets.CACHE_KEY }}
+
+      - run: deno lint
+
+      - run: deno task test
+      
+
+
