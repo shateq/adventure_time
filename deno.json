@@ -13,7 +13,6 @@
             "proseWrap": "preserve"
         }
     },
-    "importMap": "./import_map.json",
     "tasks": {
         "dev": "deno run --allow-net --unstable ./test.ts",
         "test": "deno test --parallel --allow-net"

@@ -1,4 +1,4 @@
-import { assertEquals, assertInstanceOf } from '$test/asserts.ts';
+import { assertEquals, assertInstanceOf } from 'https://deno.land/std@0.157.0/testing/asserts.ts';
 import { Episode, episodeList, href, seasonTable, transcribeEpisode } from './mod.ts';
 
 Deno.test('promise episode list', async () => {

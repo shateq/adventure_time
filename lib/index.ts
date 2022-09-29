@@ -1,4 +1,4 @@
-import { cheerio } from 'cheerio';
+import { cheerio } from 'https://deno.land/x/denocheerio@1.0.0/mod.ts'; // Version 1.0.0
 import { Episode, ListedEpisode } from './search.ts';
 
 const FANDOM = 'https://adventuretime.fandom.com';
