@@ -1,3 +1,7 @@
+/** Adventure Time Fandom link */
+export const FANDOM = 'https://adventuretime.fandom.com';
+export const WIKI = `${FANDOM}/wiki/`;
+
 /**
  * Episode object
  */
