@@ -2,6 +2,9 @@
 export const FANDOM = 'https://adventuretime.fandom.com';
 export const WIKI = `${FANDOM}/wiki/`;
 
+export const href = (href: string) => `${FANDOM}${href}`;
+export const wikiPage = (page: string) => `${WIKI}${page}`;
+
 /**
  * Episode object
  */
@@ -18,9 +21,7 @@ export class Episode {
 
     // TODO: IMPLEMENT
     search(phrase: string): boolean {
-        if (this.title.includes(phrase)) return true;
-        if (this.transcript.includes(phrase)) return true;
-        return false;
+        return this.title.includes(phrase) || this.transcript.includes(phrase);
     }
 }
 
@@ -30,13 +31,52 @@ export class Episode {
 export class ListedEpisode {
     name: string;
     href: string;
+    incomplete: boolean;
 
-    constructor(name: string, href: string) {
+    constructor(name: string, href: string, incomplete = false) {
         this.name = name;
         this.href = href;
+        this.incomplete = incomplete;
     }
 
-    transcribeListed() {
-        return import('./index.ts').then((res) => res.transcribeEpisode(this.href));
+    async transcribeListed() {
+        const index = await import('./index.ts');
+        return await index.transcribeEpisode(this.href);
     }
+}
+
+/**
+ * Character appearance
+ */
+export class Character {
+    name: string;
+    href: string;
+    role: Category;
+
+    constructor(name: string, href: string, role: Category) {
+        this.name = name;
+        this.href = href;
+        this.role = role;
+    }
+
+    async tableContents() {
+        const characaters = await import('./characters.ts');
+        return await characaters.tableContents(this);
+    }
+
+    // TODO: implement
+    async secton(section: string) {
+        const characaters = await import('./characters.ts');
+        return await characaters.section(this, section)
+    }
+}
+
+/**
+ * Character importance
+ */
+export enum Category {
+    MAIN,
+    PRINCESSES,
+    MINOR,
+    SPECIES,
 }

@@ -1,19 +1,17 @@
-import { cheerio } from 'https://deno.land/x/denocheerio@1.0.0/mod.ts'; // Version 1.0.0
-import { Episode, FANDOM, ListedEpisode } from './search.ts';
+import { Episode, href, ListedEpisode, WIKI } from './search.ts';
+import { load } from './util.ts';
 
-const LIST = `${FANDOM}/wiki/Category:Transcripts`;
-const TALK = `${FANDOM}/wiki/Category_talk:Transcripts`;
-
-const load = (url: string | URL) => fetch(url).then((res) => res.text()).then((t) => cheerio.load(t));
-
-export const href = (href: string) => `${FANDOM}${href}`;
+const LIST = `${WIKI}Category:Transcripts`;
+const INCOMPLETE = `${WIKI}Category:Incomplete_transcripts`;
+const TALK = `${WIKI}Category_talk:Transcripts`;
 
 /**
+ * TODO: URL verification
  * Get episode object
  * @param episode The URL pointing to the episode transcript page
  * @returns Episode object
  */
-export async function transcribeEpisode<T extends string | URL>(episode: T): Promise<Episode> {
+export async function transcribeEpisode(episode: string | URL): Promise<Episode> {
     let data: Episode;
 
     return await load(episode).then(($) => {
@@ -32,25 +30,29 @@ export async function transcribeEpisode<T extends string | URL>(episode: T): Pro
         return (data);
     });
 }
+
 /**
+ * TODO: multiple pages, is not full
  * List episodes
- * @returns Episode list
+ * @param incomplete List completion state
+ * @returns Array of ListedEpisode
  */
-export async function episodeList(): Promise<Array<ListedEpisode>> {
-    const content = 'div#mw-content-text>.category-page__members';
+export async function episodeList(incomplete = false): Promise<Array<ListedEpisode>> {
+    const content = '.category-page__members';
     const list: Array<ListedEpisode> = [];
 
-    return await load(LIST).then(($) => {
-        $(content).children('div').children('ul')
-            .each((_, e) => {
-                // Every item of every list
-                $(e).children('li')
-                    .each((_, el) => {
-                        const ref = href($(el).children('a').attr('href'));
+    return await load(incomplete ? INCOMPLETE : LIST).then(($) => {
+        $('ul', $(content)).each((_, e) => { // Using cheerio context
+            // Every item of every list
+            $(e).children('li')
+                .each((_, el) => {
+                    const ref = href($(el).children('a').attr('href'));
+                    // Possible categories
+                    if ($(el).text().trim().startsWith('Category:')) return true;
 
-                        list.push(new ListedEpisode($(el).text().trim(), ref));
-                    });
-            });
+                    list.push(new ListedEpisode($(el).text().trim(), ref, incomplete));
+                });
+        });
 
         return list;
     });
