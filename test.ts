@@ -1,35 +1,87 @@
-import { assertEquals, assertInstanceOf } from 'https://deno.land/std@0.157.0/testing/asserts.ts';
-import { Episode, episodeList, href, seasonTable, transcribeEpisode } from './mod.ts';
+import { bgBlue, bgGreen, bold, white } from 'https://deno.land/std@0.157.0/fmt/colors.ts';
+import { assert, assertEquals, assertExists, assertInstanceOf } from 'https://deno.land/std@0.157.0/testing/asserts.ts';
+import { Category, Episode, LADY_RAINICORN, ListedEpisode, tableContents, transcribeEpisode, wikiPage } from './mod.ts';
+// Lists
+import { episodeList, seasonTable } from './mod.ts';
 
-Deno.test('promise episode list', async () => {
+const tag = (text: Deno.TestContext) => {
+    const s = white(bold(` ${text.name.toUpperCase()} `))
+    if (text.parent) return console.log(bgGreen(s));
+    console.log(bgBlue(s));
+};
+
+Deno.test('Episode List promise', async (c) => {
+    tag(c);
     const list = await episodeList().then((res) => {
         console.table(res);
+        return res;
+    });
 
+    assertInstanceOf(list, Array<ListedEpisode>);
+});
+
+Deno.test('Incomplete Transcripts promise', async (c) => {
+    tag(c);
+    const episode = await episodeList(true).then((res) => {
+        console.table(res);
+        return res;
+    });
+
+    await c.step('Incomplete print', async (c) => {
+        tag(c);
+        const t = await episode[0].transcribeListed();
+        console.log(t);
+
+        assert(episode[0].incomplete);
+    });
+
+    assertInstanceOf(episode, Array<ListedEpisode>);
+});
+
+Deno.test('Season Table print', async (c) => {
+    tag(c);
+    const list = await seasonTable(2).then((res) => {
+        console.table(res);
         return res;
     });
 
     assertInstanceOf(list, Array);
-});
 
-Deno.test('table list type', async () => {
-    const transcribed = await seasonTable(2).then((res) => {
-        console.table(res);
-        assertInstanceOf(res, Array);
+    await c.step('Transcribe from Listed', async (c) => {
+        tag(c);
+        const episode = await list[1].transcribeListed();
 
-        return res[1].transcribeListed();
+        assertInstanceOf(episode, Episode);
+        console.table(episode);
+        // console.table(episode);
     });
-
-    assertInstanceOf(transcribed, Episode);
-    console.info(transcribed.transcript);
 });
 
-Deno.test('search boolean', async () => {
-    const boolean = await transcribeEpisode(href('/wiki/It_Came_from_the_Nightosphere/Transcript'))
+Deno.test('Search For boolean', async (c) => {
+    tag(c);
+    const boolean = await transcribeEpisode(wikiPage('It_Came_from_the_Nightosphere/Transcript'))
         .then((res) => {
             console.info(res);
             return res.search('Marceline');
         });
 
-    assertEquals(boolean, true);
-    console.info(boolean);
+    assert(boolean);
+});
+
+Deno.test('Character Table of Contents', async (c) => {
+    tag(c);
+    assertEquals(LADY_RAINICORN.role, Category.MAIN);
+    const contents = await tableContents(LADY_RAINICORN);
+    console.table(contents[Math.floor(Math.random() * contents.length)]);
+
+    assertExists(contents[4]);
+    // FIXME: once implemented
+    // await c.step("TOC Section", async (c) => {
+    //     tag(c)
+    //     const section = await LADY_RAINICORN.secton(
+    //         contents[2].id
+    //     )
+
+    //     assertExists(section)
+    // })
 });
