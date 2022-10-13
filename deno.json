@@ -14,7 +14,8 @@
         }
     },
     "tasks": {
-        "dev": "deno run --allow-net --unstable ./test.ts",
-        "test": "deno test --parallel --allow-net"
+        "dev": "deno run --unstable --allow-net --watch ./test.ts",
+        "lint": "deno lint --unstable  ./lib",
+        "test": "deno test --allow-net --parallel"
     }
 }

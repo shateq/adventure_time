@@ -4,12 +4,10 @@ on:
   push:
     paths-ignore:
       - '**.md'
-      - '**.json'
 
   pull_request:
     paths-ignore:
       - '**.md'
-      - '**.json'
 
 jobs:
   test:
@@ -34,5 +32,5 @@ jobs:
           path: ${{ env.DENO_DIR }}
           key: ${{ secrets.CACHE_KEY }}
 
-      - run: deno lint
       - run: deno task test
+      - run: deno task lint
