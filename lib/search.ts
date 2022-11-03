@@ -64,7 +64,6 @@ export class Character {
         return await characaters.tableContents(this);
     }
 
-    // TODO: implement
     async secton(section: string) {
         const characaters = await import('./characters.ts');
         return await characaters.section(this, section)

@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "allowJs": true,
         "strict": true,
         "strictNullChecks": false
     },
@@ -14,8 +13,8 @@
         }
     },
     "tasks": {
-        "dev": "deno run --unstable --allow-net --watch ./test.ts",
-        "lint": "deno lint --unstable  ./lib",
+        "dev": "deno run --allow-net --watch ./test.ts",
+        "lint": "deno lint ./lib",
         "test": "deno test --allow-net --parallel"
     }
 }

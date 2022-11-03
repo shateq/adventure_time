@@ -1,11 +1,11 @@
 import { bgBlue, bgGreen, bold, white } from 'https://deno.land/std@0.157.0/fmt/colors.ts';
 import { assert, assertEquals, assertExists, assertInstanceOf } from 'https://deno.land/std@0.157.0/testing/asserts.ts';
-import { Category, Episode, LADY_RAINICORN, ListedEpisode, tableContents, transcribeEpisode, wikiPage } from './mod.ts';
-// Lists
-import { episodeList, seasonTable } from './mod.ts';
+import { LADY_RAINICORN, transcribeEpisode, wikiPage } from './mod.ts';
+import { Category, Episode, ListedEpisode } from './mod.ts'; // Objects
+import { episodeList, seasonTable, tableContents } from './mod.ts'; // Lists
 
 const tag = (text: Deno.TestContext) => {
-    const s = white(bold(` ${text.name.toUpperCase()} `))
+    const s = white(bold(` ${text.name.toUpperCase()} `));
     if (text.parent) return console.log(bgGreen(s));
     console.log(bgBlue(s));
 };
@@ -75,13 +75,18 @@ Deno.test('Character Table of Contents', async (c) => {
     console.table(contents[Math.floor(Math.random() * contents.length)]);
 
     assertExists(contents[4]);
-    // FIXME: once implemented
-    // await c.step("TOC Section", async (c) => {
-    //     tag(c)
-    //     const section = await LADY_RAINICORN.secton(
-    //         contents[2].id
-    //     )
 
-    //     assertExists(section)
-    // })
+    await c.step('TOC Section', async (c) => {
+        tag(c);
+        const section = await LADY_RAINICORN.secton(
+            contents[1].id,
+        );
+
+        assertExists(section);
+    });
 });
+
+const contents = await tableContents(LADY_RAINICORN);
+console.log(
+    await LADY_RAINICORN.secton(contents[2].id),
+);

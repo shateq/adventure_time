@@ -11,20 +11,17 @@ type SectionRow = {
 
 // TODO: search through sections
 export async function section(ch: Character, id: string): Promise<string> {
-    let data: string;
+    if (!id.startsWith('#')) id = `#${id}`;
+    // deno-lint-ignore no-inferrable-types
+    let data: string = '';
 
     return await load(ch.href).then(($) => {
-        $(id).nextUntil('h2').each((_, e) => {
-            console.log(
-                $(e).html(),
-            );
-        });
-
-        // .each((_, e) => {
-
-        //     data += $(e).text();
-        // });
-
+        $(id)
+            .parent()
+            .nextUntil('h2')
+            .each((_, e) => {
+                data += `${$(e).text()}\n`;
+            });
         return data;
     });
 }
@@ -39,7 +36,8 @@ export async function tableContents(ch: Character): Promise<Array<SectionRow>> {
 
     const TABLE = '#toc';
     return await load(ch.href).then(($) => {
-        $('li', $(TABLE).children('ul').html()).each((_, e) => { // Uses cheerio context
+        $('li', $(TABLE).children('ul').html()).each((_, e) => {
+            // Uses cheerio context
             array.push({
                 name: $(e).children('a').text(),
                 id: $(e).children('a').attr('href'),
@@ -71,20 +69,25 @@ const speciesList = async () => {
 
 export { /*minorCharacterList,*/ princessesList, speciesList };
 
-// Main characters, don't repeat yourself!
+// MAIN CHARACTERS
 const character = (name: string, link: string) => new Character(name, `${WIKI}${link}`, Category.MAIN);
 
-const FINN = character('Finn', 'Finn');
-const MARCELINE = character('Marceline', 'Marceline');
+export const FINN = character('Finn', 'Finn'),
+    MARCELINE = character('Marceline', 'Marceline'),
+    BUBBLEGUM = character('Bonnibel Bubblegum', 'Princess_Bubblegum'),
+    ICE_KING = character('Simon Petrikov', 'Ice_King'),
+    JAKE = character('Jake', 'Jake'),
+    LADY_RAINICORN = character('Lady Rainicorn', 'Lady_Rainicorn'),
+    BMO = character('BMO', 'BMO'),
+    LSP = character('Lumpy Space Princess', 'Lumpy_Space_Princess');
 
-const BUBBLEGUM = character('Bonnibel Bubblegum', 'Princess_Bubblegum');
-const ICE_KING = character('Simon Petrikov', 'Ice_King');
-
-const JAKE = character('Jake', 'Jake');
-const LADY_RAINICORN = character('Lady Rainicorn', 'Lady_Rainicorn');
-
-const BMO = character('BMO', 'BMO');
-const LSP = character('Lumpy Space Princess', 'Lumpy_Space_Princess');
-
-const MAIN_CHARACTERS = [BMO, BUBBLEGUM, FINN, ICE_KING, JAKE, LADY_RAINICORN, LSP, MARCELINE];
-export { BMO, BUBBLEGUM, FINN, ICE_KING, JAKE, LADY_RAINICORN, LSP, MAIN_CHARACTERS, MARCELINE };
+export const MAIN_CHARACTERS = [
+    BMO,
+    BUBBLEGUM,
+    FINN,
+    ICE_KING,
+    JAKE,
+    LADY_RAINICORN,
+    LSP,
+    MARCELINE,
+];
