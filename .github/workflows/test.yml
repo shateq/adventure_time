@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 on:
   push:
     paths-ignore:
@@ -9,22 +9,29 @@ on:
 
 jobs:
   test:
-    name: Test it
+    name: tests
     runs-on: ubuntu-latest
     env:
       DENO_DIR: cache_dir
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v3.1.0
       - name: Setup Deno
         uses: denoland/setup-deno@v1.1.0
-
+        with:
+          deno-version: canary
+          
       - name: Cache dependencies 
         uses: actions/cache@v3.0.10
         with:
           path: ${{ env.DENO_DIR }}
           key: ${{ secrets.CACHE_KEY }}
 
-      - run: deno task lint
-      - run: deno task test
+      - name: check lint
+        run: deno task lint
+        
+      - name: check bundle
+        run: deno task test:bundle
+        
+      - name: run tests
+        run: deno task test
