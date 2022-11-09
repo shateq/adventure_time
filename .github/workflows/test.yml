@@ -26,5 +26,5 @@ jobs:
           path: ${{ env.DENO_DIR }}
           key: ${{ secrets.CACHE_KEY }}
 
-      - run: deno task test
       - run: deno task lint
+      - run: deno task test
