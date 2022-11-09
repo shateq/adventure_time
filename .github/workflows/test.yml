@@ -28,8 +28,8 @@ jobs:
           key: ${{ secrets.CACHE_KEY }}
 
       - name: check lint
-        run: deno lint
-        
+        run: deno lint .
+       
       - name: check bundle
         run: deno task test:bundle
         
