@@ -61,12 +61,12 @@ export class Character {
 
     async tableContents() {
         const characaters = await import('./characters.ts');
-        return await characaters.tableContents(this);
+        return await characaters.tableOfContents(this);
     }
 
     async secton(section: string) {
         const characaters = await import('./characters.ts');
-        return await characaters.section(this, section)
+        return await characaters.section(this, section);
     }
 }
 

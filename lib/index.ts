@@ -1,4 +1,4 @@
-import { Episode, href, ListedEpisode, WIKI } from './search.ts';
+import { Episode, href, ListedEpisode, WIKI } from './deps.ts';
 import { load } from './util.ts';
 
 const LIST = `${WIKI}Category:Transcripts`;
@@ -11,7 +11,9 @@ const TALK = `${WIKI}Category_talk:Transcripts`;
  * @param episode The URL pointing to the episode transcript page
  * @returns Episode object
  */
-export async function transcribeEpisode(episode: string | URL): Promise<Episode> {
+export async function transcribeEpisode(
+    episode: string | URL,
+): Promise<Episode> {
     let data: Episode;
 
     return await load(episode).then(($) => {
@@ -37,7 +39,9 @@ export async function transcribeEpisode(episode: string | URL): Promise<Episode>
  * @param incomplete List completion state
  * @returns Array of ListedEpisode
  */
-export async function episodeList(incomplete = false): Promise<Array<ListedEpisode>> {
+export async function episodeList(
+    incomplete = false,
+): Promise<Array<ListedEpisode>> {
     const content = '.category-page__members';
     const list: Array<ListedEpisode> = [];
 
@@ -48,9 +52,13 @@ export async function episodeList(incomplete = false): Promise<Array<ListedEpiso
                 .each((_, el) => {
                     const ref = href($(el).children('a').attr('href'));
                     // Possible categories
-                    if ($(el).text().trim().startsWith('Category:')) return true;
+                    if ($(el).text().trim().startsWith('Category:')) {
+                        return true;
+                    }
 
-                    list.push(new ListedEpisode($(el).text().trim(), ref, incomplete));
+                    list.push(
+                        new ListedEpisode($(el).text().trim(), ref, incomplete),
+                    );
                 });
         });
 
@@ -73,7 +81,9 @@ export async function seasonTable(int: number): Promise<Array<ListedEpisode>> {
                     .children('tbody').children('tr')
                     .each((_, el) => {
                         const name = $(el).children('td').first().text();
-                        const ref = href($(el).children('td').children('a').attr('href'));
+                        const ref = href(
+                            $(el).children('td').children('a').attr('href'),
+                        );
 
                         if (name != '') {
                             list.push(new ListedEpisode(name, ref));

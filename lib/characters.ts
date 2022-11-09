@@ -1,4 +1,4 @@
-import { Category, Character, WIKI } from './search.ts';
+import { Category, Character, WIKI } from './deps.ts';
 import { characterIndex, load } from './util.ts';
 
 type SectionRow = {
@@ -31,7 +31,7 @@ export async function section(ch: Character, id: string): Promise<string> {
  * @param ch Character to get Contents from
  * @returns Array of ContentRow: id and name of the paragraph
  */
-export async function tableContents(ch: Character): Promise<Array<SectionRow>> {
+export async function tableOfContents(ch: Character): Promise<Array<SectionRow>> {
     const array: SectionRow[] = [];
 
     const TABLE = '#toc';
@@ -70,7 +70,8 @@ const speciesList = async () => {
 export { /*minorCharacterList,*/ princessesList, speciesList };
 
 // MAIN CHARACTERS
-const character = (name: string, link: string) => new Character(name, `${WIKI}${link}`, Category.MAIN);
+const character = (name: string, link: string) =>
+    new Character(name, `${WIKI}${link}`, Category.MAIN);
 
 export const FINN = character('Finn', 'Finn'),
     MARCELINE = character('Marceline', 'Marceline'),
