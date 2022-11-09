@@ -2,7 +2,7 @@
 
 [![deno.land](https://shield.deno.dev/x/adventure_time)](https://deno.land/x/adventure_time)
 
-Deno-ready TypeScript library for searching through _AT_ transcript pages.
+Deno-ready (+ node support) TypeScript library for searching through _AT_ transcript pages.
 Fetches pages from _AT_ fandom website and parses it to be accessible from library.
 
 > ⚠️ Alpha stage! Breaking the breaking changes!
@@ -29,4 +29,4 @@ episodeList().then((list) => {
 
 ### License ![License](https://img.shields.io/github/license/shateq/adventure_time)
 
-Project code is available under GNU GPL 3.0 license, check `LICENSE` file for details.
+Project code is available under GNU GPL 3.0. Check [LICENSE](LICENSE) file.
