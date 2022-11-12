@@ -2,8 +2,9 @@
 
 [![deno.land](https://shield.deno.dev/x/adventure_time)](https://deno.land/x/adventure_time)
 
-Deno-ready (+ node support) TypeScript library for searching through _AT_ transcript pages.
-Fetches pages from _AT_ fandom website and parses it to be accessible from library.
+Deno-ready (+ node support) TypeScript library for searching through _AT_
+transcript pages. Fetches pages from _AT_ fandom website and parses it to be
+accessible from library.
 
 > ⚠️ Alpha stage! Breaking the breaking changes!
 

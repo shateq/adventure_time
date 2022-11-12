@@ -10,7 +10,7 @@
         }
     },
     "tasks": {
-        "build": "deno run --allow-read --allow-write --allow-env --allow-run _npm.ts",
+        "build": "deno run --allow-net --allow-read --allow-write --allow-env --allow-run _npm.ts",
         "dev": "deno run --allow-net --watch ./test.ts",
         "test": "deno test --allow-net --parallel --ignore=npm",
         "test:bundle": "deno bundle --import-map import-map.json mod.ts at.bundle.js"

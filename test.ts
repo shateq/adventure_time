@@ -67,5 +67,5 @@ Deno.test('Season Table print', async (c) => {
 
 const contents = await tableOfContents(LADY_RAINICORN);
 console.log(
-    await LADY_RAINICORN.secton(contents[2].id),
+    await LADY_RAINICORN.articleSection(contents[2].id),
 );

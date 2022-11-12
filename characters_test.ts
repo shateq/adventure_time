@@ -15,7 +15,7 @@ Deno.test('Character Table of Contents', async (c) => {
 
     await c.step('TOC Section', async (c) => {
         tag(c);
-        const section = await LADY_RAINICORN.secton(
+        const section = await LADY_RAINICORN.articleSection(
             contents[1].id,
         );
 

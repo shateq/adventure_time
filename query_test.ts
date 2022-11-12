@@ -1,5 +1,5 @@
 import { assert } from 'https://deno.land/std@0.157.0/testing/asserts.ts';
-import { tag } from './test.ts'
+import { tag } from './test.ts';
 import { transcribeEpisode, wikiPage } from './mod.ts';
 
 Deno.test('Search For boolean', async (c) => {

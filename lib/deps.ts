@@ -25,6 +25,7 @@ export class Episode {
     }
 }
 
+import { transcribeEpisode } from './index.ts';
 /**
  * Episode in the list
  */
@@ -40,11 +41,11 @@ export class ListedEpisode {
     }
 
     async transcribeListed() {
-        const index = await import('./index.ts');
-        return await index.transcribeEpisode(this.href);
+        return await transcribeEpisode(this.href);
     }
 }
 
+import { section, tableOfContents } from './characters.ts';
 /**
  * Character appearance
  */
@@ -60,13 +61,11 @@ export class Character {
     }
 
     async tableContents() {
-        const characaters = await import('./characters.ts');
-        return await characaters.tableOfContents(this);
+        return await tableOfContents(this);
     }
 
-    async secton(section: string) {
-        const characaters = await import('./characters.ts');
-        return await characaters.section(this, section);
+    async articleSection(id: string) {
+        return await section(this, id);
     }
 }
 

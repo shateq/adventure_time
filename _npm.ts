@@ -9,19 +9,19 @@ async function start() {
         entryPoints: ['./mod.ts'],
         outDir: './npm',
         shims: {
-            blob: true,
             deno: true,
         },
-        test: true,
+        test: false, // To be true
+        scriptModule: false,
         typeCheck: false,
         compilerOptions: {
             target: 'ES2021',
-            lib: ['esnext', 'dom'],
+            lib: ['esnext'],
         },
         package: {
-            name: 'npm-name',
+            name: 'at-transcript',
             version: Deno.args[0],
-            description: 'hhhh',
+            description: 'A library to work with Adventure Time! Transcript',
             license: 'GPL 3.0',
             bugs: {
                 url: 'https://github.com/shateq/adventure_time/issues',

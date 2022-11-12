@@ -31,7 +31,9 @@ export async function section(ch: Character, id: string): Promise<string> {
  * @param ch Character to get Contents from
  * @returns Array of ContentRow: id and name of the paragraph
  */
-export async function tableOfContents(ch: Character): Promise<Array<SectionRow>> {
+export async function tableOfContents(
+    ch: Character,
+): Promise<Array<SectionRow>> {
     const array: SectionRow[] = [];
 
     const TABLE = '#toc';
