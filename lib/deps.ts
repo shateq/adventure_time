@@ -45,7 +45,6 @@ export class ListedEpisode {
     }
 }
 
-import { section, tableOfContents } from './characters.ts';
 /**
  * Character appearance
  */
@@ -60,12 +59,14 @@ export class Character {
         this.role = role;
     }
 
-    async tableContents() {
-        return await tableOfContents(this);
+    async tableofContents() {
+        const characters = await import('./characters.ts');
+    return await characters.tableOfContents(this);
     }
 
     async articleSection(id: string) {
-        return await section(this, id);
+        const characters = await import('./characters.ts');
+        return await characters.section(this, id)
     }
 }
 
